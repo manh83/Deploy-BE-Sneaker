@@ -14,7 +14,7 @@ dotenv.config();
 const storage = new CloudinaryStorage({
   cloudinary: cloudinary,
   params: {
-    folder: process.env.FOLDER_UPLOAD,
+    folder: "giay-sneaker",
     allowed_formats: ["jpg", "png", "jpeg", "webp", "gif"],
   },
 });
