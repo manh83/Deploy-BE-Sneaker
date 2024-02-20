@@ -84,7 +84,7 @@ const generateStatistics = async (startDate, endDate) => {
 
     let totalQuantity = 0; // tổng số lượng bán được
     let totalRevenue = 0; // tổng doanh thu
-
+    let totalSales = 0 // tổng doanh số
     const statistics = [];
 
     for (const order of orders) {
@@ -100,8 +100,8 @@ const generateStatistics = async (startDate, endDate) => {
             statistics.push(statistic);
             totalQuantity += product.quantity;
         }
-        totalRevenue += order.totalPrice
+        totalSales += order.totalPrice
     }
 
-    return { startDate, totalQuantity, orders, totalRevenue,endDate };
+    return { startDate, totalQuantity, orders, totalRevenue, endDate,totalSales };
 };

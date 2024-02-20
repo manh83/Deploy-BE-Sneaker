@@ -302,20 +302,20 @@ export const updateVariantProduct = async (req,res) => {
       return res.status(404).json({ message: 'Không tìm thấy biến thể' });
     }
 
-    if(!variant.sellingPrice){
+    if(!variant.sellingPrice || variant.sellingPrice ===0){
       variant.sellingPrice = sellingPrice
     }else{
       variant.sellingPrice = sellingPrice
     }
 
 
-    if(!variant.original_price){
+    if(!variant.original_price || variant.original_price === 0){
       variant.original_price = original_price
     }else{
       variant.original_price = original_price
     }
 
-    if(!variant.importPrice){
+    if(!variant.importPrice || variant.importPrice === 0){
       variant.importPrice = importPrice
     }else{
       variant.importPrice = importPrice
@@ -324,15 +324,15 @@ export const updateVariantProduct = async (req,res) => {
 
       if (quantity===0 && quantityImported===0) {
         variant.inventory = 0 
-      }
-
-      if(quantityImported !== 0 && quantity!==0){
+        variant.quantity = 0
+      }else if(quantityImported !== 0 && quantity!==0){
         variant.inventory += quantityImported
         variant.quantity += quantityImported;
+        variant.totalQuantityVariant += quantityImported
       }else if(quantity===0 && quantityImported !== 0 ){
         variant.inventory = quantityImported
         variant.quantity = quantityImported;
-        variant.quantity += quantityImported
+        variant.totalQuantityVariant += quantityImported
       }
 
 
