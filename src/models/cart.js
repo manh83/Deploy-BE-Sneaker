@@ -26,7 +26,8 @@ const cartSchema = new mongoose.Schema({
           type: String
         },
         totalAmount: Number,  // tổng tiền của 1 biến thể sản phẩm (đã nhân với quantity)
-        price: Number // giá tiền của 1 sản phẩm
+        price: Number, // giá tiền của 1 sản phẩm
+        importPrice: Number    // giá tiền nhập hàng của 1 biến thể sản phẩm
       }
     ]
   },{timestamps: true, versionKey: false});

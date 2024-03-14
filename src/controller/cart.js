@@ -29,7 +29,7 @@ export const getCart = async (req, res) => {
 }
 
 export const addToCart = async (req, res) => {
-  const { productId, color, size, quantity,price,imgUrl,totalAmount } = req.body;
+  const { productId, color, size, quantity,price,importPrice,imgUrl,totalAmount } = req.body;
   const userId = req.user._id;
   try {
     let cart = await Cart.findOne({ userId });
@@ -39,7 +39,7 @@ export const addToCart = async (req, res) => {
     }
 
     if (!cart) {
-      cart = new Cart({ userId, products: [{ productId, color, size, quantity,price,imgUrl,totalAmount }] });
+      cart = new Cart({ userId, products: [{ productId, color, size, quantity,price,importPrice,imgUrl,totalAmount }] });
     }else{
       const existingProduct = cart.products.find(
         (item) => item.productId.equals(productId) && item.color === color && item.size === size
@@ -55,7 +55,7 @@ export const addToCart = async (req, res) => {
         if (!productDocument) {
           return res.status(404).json({ message: "Không tìm thấy sản phẩm." });
         }
-        cart.products.unshift({ productId, color, size, quantity,price,imgUrl,totalAmount });
+        cart.products.unshift({ productId, color, size, quantity,price,importPrice,imgUrl,totalAmount });
       }
     }
 

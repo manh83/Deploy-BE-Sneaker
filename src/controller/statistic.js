@@ -29,13 +29,13 @@ export const generateStatisticsForDateRange = async (req, res) => {
       adjustedEndDate
     );
 
+
     res.status(200).json({
-      success: true,
       message: "lấy dữ liệu thành công",
       statistics,
     });
   } catch (error) {
-    res.status(500).json({ success: false, error: error.message });
+    res.status(500).json({ error: error.message });
   }
 };
 
@@ -80,7 +80,7 @@ export const generateStatisticsForSpecificOrCurrentMonth = async (req, res) => {
 const generateStatistics = async (startDate, endDate) => {
     const orders = await Order.find({
         createdAt: { $gte: startDate, $lt: endDate },
-    }).populate("products.productId", "name price");
+    }).populate("products.productId", "name price importPrice");
 
     let totalQuantity = 0; // tổng số lượng bán được
     let totalRevenue = 0; // tổng doanh thu
@@ -88,6 +88,7 @@ const generateStatistics = async (startDate, endDate) => {
     const statistics = [];
 
     for (const order of orders) {
+      let orderTotalRevenue = 0;
         for (const product of order.products) {
             const statistic = {
                 date: startDate,
@@ -95,13 +96,15 @@ const generateStatistics = async (startDate, endDate) => {
                 quantity: product.quantity,
                 
             };
-            
-
             statistics.push(statistic);
             totalQuantity += product.quantity;
+            // Tính doanh thu từ sản phẩm trong đơn hàng
+            const productRevenue = (product.price * product.quantity) - (product.importPrice * product.quantity) - 30000;
+            orderTotalRevenue += productRevenue;
         }
-        totalSales += order.totalPrice
+        totalRevenue += orderTotalRevenue;
+        totalSales += order.totalPrice;
     }
 
-    return { startDate, totalQuantity, orders, totalRevenue, endDate,totalSales };
+    return { startDate, totalQuantity, orders, totalRevenue, endDate, totalSales };
 };
